@@ -40,19 +40,19 @@ export class BancoService {
   }
 
   buscarSaldo(saldo:number):Cuenta[]{
-    return this.cuenta.filter((cuenta:Cuenta) => cuenta.saldo === saldo);
+    return this.cuenta.filter((cuenta:Cuenta)=> cuenta.saldo >= saldo);
   }
 
   buscarTipo(tipo:string):Cuenta[]{
     return this.cuenta.filter((cuenta:Cuenta) => cuenta.tipo === tipo);
   }
 
-  // borrarNumCuenta(numCuenta:string):boolean{
-  //   if(this.cuenta.some(cuenta => cuenta.numeroCuenta === numCuenta)){
-  //     this.cuenta.pop();
-  //     return true;
-  //   }else{
-  //     return false;
-  //   }
-  // }
+  borrarNumCuenta(numCuenta:string):string{
+    this.cuenta = this.cuenta.filter((cuenta:Cuenta)=> cuenta.numeroCuenta === numCuenta);
+    if(this.cuenta){
+      return "Has borrado la cuenta";
+    }else{
+      return "No se dio de baja";
+    }
+  }
 }

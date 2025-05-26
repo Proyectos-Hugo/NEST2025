@@ -4,8 +4,7 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
-  Post,
+
 } from '@nestjs/common';
 import { PaisesService } from '../service/paises.service';
 

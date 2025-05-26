@@ -7,6 +7,7 @@ import {
 
 } from '@nestjs/common';
 import { PaisesService } from '../service/paises.service';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('pais')
 export class PaisController {
@@ -17,6 +18,8 @@ export class PaisController {
     return this.paisService.findAllContinentes();
   }
 
+  @ApiOperation({summary:"lista de continentes",description:"a partir del nombre del continente, devuelve la lista de paises"})
+  
   @Get('paisesContinente/:continente')
   paisesContinente(@Param("continente")continente:string){
     return this.paisService.findByContinente(continente);

@@ -1,23 +1,26 @@
-import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Entity } from "typeorm";
+import { Cuenta } from "./Cuenta";
 
 @Entity("movimientos")
 export class Movimientos{
     @PrimaryGeneratedColumn("identity")
     idMovimiento:number;
-    @Column()
-    idCuenta:number;
     @Column({type:"datetime"})
     fecha:Date;
     @Column()
     cantidad:number;
     @Column()
     operacion:string;
-    constructor(idMovimiento?:number,idCuenta?:number,fecha?:Date,cantidad?:number, operacion?:string){
-        this.idMovimiento=idMovimiento;
-        this.idCuenta=idCuenta;
-        this.fecha=fecha;
-        this.cantidad=cantidad;
-        this.operacion=operacion;
+
+    @ManyToOne(()=>Cuenta,cuenta=>cuenta.movimientos)
+    @JoinColumn({name:"idCuenta",referencedColumnName:"numeroCuenta"})
+    cuenta:Cuenta;
+    constructor(idMovimiento?:number,cuenta?:Cuenta,fecha?:Date,cantidad?:number, operacion?:string){
+        this.idMovimiento=idMovimiento || 0;
+        this.cuenta= cuenta || null;
+        this.fecha=fecha || new Date();
+        this.cantidad=cantidad || 0;
+        this.operacion=operacion || '';
     }
 }

@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cuenta } from 'src/model/Cuenta';
 import { Movimientos } from 'src/model/Moviminetos';
-import { Repository, Between } from 'typeorm';
+import { Repository, Between, MoreThan } from 'typeorm';
 
 @Injectable()
 export class MovimientosService {
-  constructor(@InjectRepository(Movimientos) private movimientosRepository:Repository<Movimientos>) {
-  }
+  constructor(
+    @InjectRepository(Movimientos) private movimientosRepository: Repository<Movimientos>,
+    @InjectRepository(Cuenta) private cuentaRepository: Repository<Cuenta>
+  ) {}
 
   async save(movimiento:Movimientos):Promise<boolean>{
     const resultado = this.movimientosRepository.save(movimiento);
@@ -18,8 +21,14 @@ export class MovimientosService {
     }
   }
 
-  findByIdCuenta(id:number):Promise<Movimientos[]>{
-    return this.movimientosRepository.findBy({idCuenta:id});
+  findByIdCuenta(idCuenta:number):Promise<Movimientos[]>{
+    return this.movimientosRepository.find({
+      where:{
+        cuenta:{
+          numeroCuenta:idCuenta
+        }
+      }
+    })
   }
 
   findByDate(fecha1:string, fecha2:string):Promise<Movimientos[]>{
@@ -29,5 +38,26 @@ export class MovimientosService {
       }
     });
   }
+
+  findByCuentasSaldoMin(saldoMin:number):Promise<Movimientos[]>{
+    return this.movimientosRepository.find({
+      where:{
+        cuenta:{
+            saldo:MoreThan(saldoMin)
+        }
+    },
+    relations:["cuenta"]  
+    });
+ }
+
+
+ findByFechas(fecha1:Date,fecha2:Date):Promise<Movimientos[]>{
+  return this.movimientosRepository.find({
+    where:{
+        fecha:Between(fecha1,fecha2)
+    },
+    relations:["cuenta"]
+    });
+ }
 
 }

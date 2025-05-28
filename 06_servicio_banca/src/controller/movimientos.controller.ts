@@ -35,5 +35,11 @@ export class MovimientosController {
     console.log(fecha1,fecha2);
     return this.movimientosService.findByDate(fecha1,fecha2);
   }
+
+  @Get('listado')
+  listCuenta(@Query("fecha1")fecha1:Date){
+    console.log(fecha1);
+    return this.listCuenta(fecha1);
+  }
   
 }

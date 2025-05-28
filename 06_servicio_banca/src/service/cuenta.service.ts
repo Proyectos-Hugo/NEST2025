@@ -11,7 +11,7 @@ export class CuentaService {
       @InjectRepository(Cuenta) private cuentaRepository: Repository<Cuenta>
     ) {}
 
-    async listCuentas(fecha1: string): Promise<Cuenta[]> {
+    async listCuentas(fecha1: Date): Promise<Cuenta[]> {
     const movimientos = await this.movimientosRepository.find({
       where: { 
         fecha: new Date(fecha1) 

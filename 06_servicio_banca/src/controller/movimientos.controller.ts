@@ -1,45 +1,28 @@
-import { Query } from '@nestjs/common';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Post,
-} from '@nestjs/common';
-import { Movimientos } from 'src/model/Moviminetos';
-import { MovimientosService } from 'src/service/movimientos.service';
-
+import { Body, Controller, Param, Post } from "@nestjs/common";
+import { Query } from "@nestjs/common";
+import { Get } from "@nestjs/common";
+import { Movimientos } from "src/model/Moviminetos";
+import { MovimientosService } from "src/service/movimientos.service";
 
 @Controller('movimientos')
 export class MovimientosController {
-  constructor(private movimientosService: MovimientosService) {}
-
-  @Post("guardar")
-  save(@Body() movimiento:any){
-    const mov = this.movimientosService.save(movimiento);
-    if(mov){
-      return "Movimiento realizado";
-    }else{
-      return "Error al realizar el movimiento";
-    }
+  constructor(private readonly movimientosService: MovimientosService) {}
+  @Get('fechas')
+  buscarPorFechas(@Query("fecha1") fecha1:Date,@Query("fecha2") fecha2:Date){
+    console.log("fecha1: "+fecha1);
+    console.log("fecha2: "+fecha2);
+    return this.movimientosService.findByFechas(fecha1,fecha2);
   }
-
-  @Get('cuenta/:id')
-  findByIdMovimientos(@Param("id")id:number):Promise<Movimientos[]>{
-    return this.movimientosService.findByIdCuenta(id);
+  @Get("movscuenta/:idCuenta")
+  buscarPorCuenta(@Param("idCuenta") idCuenta:number){
+    return this.movimientosService.findByIdCuenta(idCuenta);
   }
-
-  @Get('fecha')
-  findByDate(@Query("fecha1")fecha1:string,@Query("fecha2")fecha2:string){
-    console.log(fecha1,fecha2);
-    return this.movimientosService.findByDate(fecha1,fecha2);
+  @Post('alta')
+  alta(@Body() movimiento:Movimientos){
+    this.movimientosService.save(movimiento);
   }
-
-  @Get('listado')
-  listCuenta(@Query("fecha1")fecha1:Date){
-    console.log(fecha1);
-    return this.listCuenta(fecha1);
+  @Get("porSaldoMin/:saldoMin")
+  buscarPorSaldoSuperior(@Param("saldoMin") saldoMin:number){
+    return this.movimientosService.findByCuentasSaldoMin(saldoMin);
   }
-  
 }

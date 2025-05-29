@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { CuentaService } from 'src/service/cuenta.service';
 
@@ -22,6 +23,7 @@ export class CuentaController {
   buscarPorCantidad(@Param("cantidad") cantidad:number){
     return this.cuentaService.findByExtraccionMin(cantidad);
   }
+
 }
   
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Cliente } from 'src/model/Cliente';
 import { Cuenta } from 'src/model/Cuenta';
 import { Movimientos } from 'src/model/Moviminetos';
 import { MoreThan, Repository } from 'typeorm';
@@ -8,7 +9,8 @@ import { MoreThan, Repository } from 'typeorm';
 export class CuentaService {
   constructor(
       @InjectRepository(Movimientos) private movimientosRepository: Repository<Movimientos>,
-      @InjectRepository(Cuenta) private cuentaRepository: Repository<Cuenta>
+      @InjectRepository(Cuenta) private cuentaRepository: Repository<Cuenta>,
+      @InjectRepository(Cliente) private clienteRepository: Repository<Cliente>
     ) {}
 
     async listCuentas(fecha1: Date): Promise<Cuenta[]> {
@@ -33,4 +35,5 @@ export class CuentaService {
     return movimientos.map(m=>m.cuenta);
   }
 
+ 
 }

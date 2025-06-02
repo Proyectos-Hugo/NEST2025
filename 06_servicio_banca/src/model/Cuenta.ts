@@ -1,6 +1,6 @@
-import { Cliente } from './Cliente';
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
-import { Movimientos } from "./Moviminetos";
+import { Cliente } from "./Cliente";
+import { Movimiento } from "./Moviminetos";
 
 @Entity("cuentas")
 export class Cuenta{
@@ -10,30 +10,25 @@ export class Cuenta{
     saldo:number;
     @Column()
     tipoCuenta:string;
-
-    @OneToMany(()=>Movimientos, movimiento => movimiento.cuenta)
-    movimientos:Movimientos[];
-    @ManyToMany(()=>Cliente, clientes=>clientes.cuentas)
+    @OneToMany(()=>Movimiento,movimiento=>movimiento.cuenta)
+    movimientos:Movimiento[];
+    @ManyToMany(()=>Cliente,cliente=>cliente.cuentas,{cascade:["insert","remove"]})
     @JoinTable({
         name: 'titulares',
-        joinColumns: [
-            {
-                name: 'idCuenta',
-                referencedColumnName: 'numeroCuenta',
-            }
-        ],
-        inverseJoinColumns: [
-            {
-                name: 'idCliente',
-                referencedColumnName: 'dni',
-            }
-        ]
+        joinColumn: {
+            name: 'idCuenta',
+            referencedColumnName: 'numeroCuenta',
+        },
+        inverseJoinColumn: {
+            name: 'idCliente',
+            referencedColumnName: 'dni',
+        },
     })
     clientes:Cliente[];
-    
-    constructor(numCuen?:number, sal?:number, tipCuen?:string){
-        this.numeroCuenta=numCuen;
-        this.saldo=sal;
-        this.tipoCuenta=tipCuen;
+
+    constructor(numeroCuenta?:number,saldo?:number,tipoCuenta?:string){
+        this.numeroCuenta=numeroCuenta;
+        this.saldo=saldo;
+        this.tipoCuenta=tipoCuenta;
     }
 }

@@ -1,25 +1,22 @@
-import { Column, ManyToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, ManyToMany, PrimaryColumn } from "typeorm";
 import { Cuenta } from "./Cuenta";
 
-export class Cliente {
-    map(arg0: (m: any) => any): Cuenta[] | PromiseLike<Cuenta[]> {
-      throw new Error('Method not implemented.');
-    }
-
+@Entity("clientes")
+export class Cliente{
     @PrimaryColumn()
     dni:number;
     @Column()
     nombre:string;
     @Column()
-    dirrecion:string;
+    direccion:string;
     @Column()
     telefono:number;
-    @ManyToMany(()=> cuenta=>cuenta.clientes)
+    @ManyToMany(()=>Cuenta,cuenta=>cuenta.clientes)
     cuentas:Cuenta[];
-
-    constructor(dni?:number, nombre?:string, dir?:string, telefono?:number){
-        this.dni=dni;
-        this.nombre=nombre;
-
+    constructor(dni?:number, nombre?:string, direccion?:string, telefono?:number){
+        this.dni = dni || 0; // Si no se proporciona, se inicializa a 0
+        this.nombre = nombre || ''; // Si no se proporciona, se inicializa a una cadena vacía
+        this.direccion = direccion || ''; // Si no se proporciona, se inicializa a una cadena vacía
+        this.telefono = telefono || 0; // Si no se proporciona, se inicializa a 0
     }
 }

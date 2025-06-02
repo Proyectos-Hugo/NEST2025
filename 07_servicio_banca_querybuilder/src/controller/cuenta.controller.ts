@@ -6,24 +6,39 @@ import {
   Param,
   Patch,
   Post,
-  Query,
+  Res,
 } from '@nestjs/common';
-import { CuentaService } from 'src/service/cuenta.service';
-
+import {Response} from 'express';
+import { Cuenta } from 'src/model/Cuenta';
+import { CuentasService } from 'src/service/cuenta.service';
 
 @Controller('cuentas')
-export class CuentaController {
-  constructor(private cuentaService: CuentaService) {}
-
+export class CuentasController {
+  constructor(private readonly cuentasService: CuentasService) {}
   @Get("buscarPorFecha/:fecha")
   buscarPorFecha(@Param("fecha") fecha:Date){
-    return this.cuentaService.listCuentas(fecha);
+    return this.cuentasService.findByMovimientosFecha(fecha);
   }
   @Get("buscarPorCantidad/:cantidad")
   buscarPorCantidad(@Param("cantidad") cantidad:number){
-    return this.cuentaService.findByExtraccionMin(cantidad);
+    return this.cuentasService.findByExtraccionMin(cantidad);
   }
 
+  //endpoint que a partir del dni del cliente devuelva sus cuentas. 
+  //si ese cliente no existe o no tiene cuentas, se devuelve un 409
+  @Get("buscarPorDni/:dni")
+  async buscarPorDni(@Param("dni") dni:number, @Res() response:Response){
+    const cuentas:Cuenta[]=await this.cuentasService.findByDni(dni);
+    if(cuentas.length>0){
+      response.status(200).json(cuentas);
+    }else{
+      response.status(409).json([]);
+    }
+  }
+  @Post('alta')
+  altaCuenta(@Body() datos:any){
+    const cuenta:Cuenta=datos.cuenta;
+    const dnis:number[]=datos.dnis;
+    this.cuentasService.altaCuenta(cuenta,dnis);
+  }
 }
-  
-

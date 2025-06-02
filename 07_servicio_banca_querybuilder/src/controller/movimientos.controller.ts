@@ -1,8 +1,15 @@
-import { Body, Controller, Param, Post } from "@nestjs/common";
-import { Query } from "@nestjs/common";
-import { Get } from "@nestjs/common";
-import { Movimientos } from "src/model/Moviminetos";
-import { MovimientosService } from "src/service/movimientos.service";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { Movimiento } from 'src/model/Moviminetos';
+import { MovimientosService } from 'src/service/movimientos.service';
 
 @Controller('movimientos')
 export class MovimientosController {
@@ -18,7 +25,7 @@ export class MovimientosController {
     return this.movimientosService.findByIdCuenta(idCuenta);
   }
   @Post('alta')
-  alta(@Body() movimiento:Movimientos){
+  alta(@Body() movimiento:Movimiento){
     this.movimientosService.save(movimiento);
   }
   @Get("porSaldoMin/:saldoMin")

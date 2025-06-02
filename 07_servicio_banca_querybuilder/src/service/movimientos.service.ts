@@ -1,46 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Cuenta } from 'src/model/Cuenta';
-import { Movimientos } from 'src/model/Moviminetos';
-import { Repository, Between, MoreThan } from 'typeorm';
+import { Movimiento } from 'src/model/Moviminetos';
+
+import { Between, CustomRepositoryCannotInheritRepositoryError, MoreThan, Repository } from 'typeorm';
+
 
 @Injectable()
 export class MovimientosService {
-  constructor(
-    @InjectRepository(Movimientos) private movimientosRepository: Repository<Movimientos>,
-    @InjectRepository(Cuenta) private cuentaRepository: Repository<Cuenta>
-  ) {}
+ constructor(@InjectRepository(Movimiento) private repository:Repository<Movimiento>){
+  
+ }
 
-  async save(movimiento:Movimientos):Promise<boolean>{
-    const resultado = this.movimientosRepository.save(movimiento);
-    if(resultado){
-      return false;
-    }else{
-      this.movimientosRepository.save(movimiento);
-      return true;
-    }
-  }
+ save(movimiento:Movimiento):void{
+  this.repository.save(movimiento);
+ }
 
-  findByIdCuenta(idCuenta:number):Promise<Movimientos[]>{
-    return this.movimientosRepository.find({
-      where:{
+ findByIdCuenta(idCuenta:number):Promise<Movimiento[]>{
+  return this.repository.find({
+    where:{
         cuenta:{
-          numeroCuenta:idCuenta
+            numeroCuenta:idCuenta
         }
-      }
-    })
-  }
-
-  findByDate(fecha1:string, fecha2:string):Promise<Movimientos[]>{
-    return this.movimientosRepository.find({
-      where: {
-        fecha: Between(new Date(fecha1), new Date(fecha2))
-      }
-    });
-  }
-
-  findByCuentasSaldoMin(saldoMin:number):Promise<Movimientos[]>{
-    return this.movimientosRepository.find({
+    },
+    relations:["cuenta"]
+  });
+ }
+ findByCuentasSaldoMin(saldoMin:number):Promise<Movimiento[]>{
+    return this.repository.find({
       where:{
         cuenta:{
             saldo:MoreThan(saldoMin)
@@ -51,15 +37,12 @@ export class MovimientosService {
  }
 
 
- findByFechas(fecha1:Date,fecha2:Date):Promise<Movimientos[]>{
-  return this.movimientosRepository.find({
+ findByFechas(fecha1:Date,fecha2:Date):Promise<Movimiento[]>{
+  return this.repository.find({
     where:{
         fecha:Between(fecha1,fecha2)
     },
     relations:["cuenta"]
     });
  }
-
- 
-
 }

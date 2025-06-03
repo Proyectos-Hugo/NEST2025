@@ -41,4 +41,8 @@ export class CuentasController {
     const dnis:number[]=datos.dnis;
     this.cuentasService.altaCuenta(cuenta,dnis);
   }
+  @Get("saldoMedio")
+  saldoMedio(){
+    return this.cuentasService.saldoMedio();
+  }
 }

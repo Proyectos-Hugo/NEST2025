@@ -5,7 +5,6 @@ import { Cuenta } from './Cuenta';
 export class Movimiento{
     @PrimaryGeneratedColumn()
     idMovimiento:number;
-   
     @Column({type:"datetime"})
     fecha:Date;
     @Column()

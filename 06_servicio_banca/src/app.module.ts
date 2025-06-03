@@ -1,14 +1,12 @@
-import { CuentaController } from './controller/cuenta.controller';
+import { CuentasService } from 'src/service/cuenta.service';
 import { Cliente } from './model/Cliente';
 import { Module } from '@nestjs/common';
 import { MovimientosController } from './controller/movimientos.controller';
 import { MovimientosService } from './service/movimientos.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Movimientos } from './model/Moviminetos';
+import { Movimiento } from './model/Moviminetos';
 import { Cuenta } from './model/Cuenta';
-import { ClienteController } from './controller/clientes.controller';
-import { CuentaService } from './service/cuenta.service';
-import { ClienteService } from './service/clientes.service';
+import { ClientesService } from './service/clientes.service';
 @Module({
   imports: [TypeOrmModule.forRoot({
   type: 'mysql',
@@ -17,10 +15,10 @@ import { ClienteService } from './service/clientes.service';
   username: 'nestuser',
   password: 'nestpass',
   database: 'bancabd',
-  entities: [Movimientos,Cuenta,Cliente],
+  entities: [Movimiento,Cuenta,Cliente],
   synchronize: false,
-  }),TypeOrmModule.forFeature([Movimientos,Cuenta,Cliente])],
-  controllers: [MovimientosController,CuentaController,ClienteController],
-  providers: [MovimientosService,CuentaService,ClienteService],
+  }),TypeOrmModule.forFeature([Movimiento,Cuenta,Cliente])],
+  controllers: [MovimientosController,CuentasService],
+  providers: [MovimientosService,CuentasService,ClientesService],
 })
 export class AppModule {}

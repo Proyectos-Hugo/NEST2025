@@ -2,54 +2,42 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cliente } from 'src/model/Cliente';
 import { Cuenta } from 'src/model/Cuenta';
-import { Movimiento } from 'src/model/Moviminetos';
-import { In, MoreThan, Repository } from 'typeorm';
+import { DataSource, In, MoreThan, Repository } from 'typeorm';
 
 
 @Injectable()
 export class CuentasService {
-  constructor(@InjectRepository(Movimiento) private movimientosRepository:Repository<Movimiento>,
-              @InjectRepository(Cuenta) private cuentasRepository:Repository<Cuenta>,
-              @InjectRepository(Cliente) private clientesRepository:Repository<Cliente>){
+  constructor( @InjectRepository(Cuenta) private cuentasRepository:Repository<Cuenta>,
+   @InjectRepository(Cliente) private clientesRepository:Repository<Cliente>,
+   private dataSource:DataSource
+){
     
   }
   async findByMovimientosFecha(fecha:Date):Promise<Cuenta[]>{
-    const movimientos:Movimiento[]=await this.movimientosRepository.find({
-      where:{
-        fecha:fecha
-      },
-      relations:["cuenta"]
-    });//Movimiento[]
-    return [...new Set(movimientos.map(m=>m.cuenta))];
+    return this.cuentasRepository.createQueryBuilder("cuenta")
+      .innerJoin("cuenta.movimientos","m")
+      .where("m.fecha>=:f",{f:fecha})
+      .distinct(true)
+      .getMany();
     
   }
   async findByExtraccionMin(cantidad:number):Promise<Cuenta[]>{
-    const movimientos:Movimiento[]=await this.movimientosRepository.find({
-      where:{
-        cantidad:MoreThan(cantidad),
-        operacion:"extracción"
-      },
-      relations:["cuenta"]
-    });//Movimiento[]
-    return movimientos.map(m=>m.cuenta);
+    return this.cuentasRepository.createQueryBuilder("cuenta")
+      .innerJoin("cuenta.movimientos","m")
+      .where("m.cantidad>=:cant",{cant:cantidad})
+      .andWhere("m.operacion='extracción'")
+      .distinct(true)
+      .getMany();
     
   }
 
   //cuentas asociada al titular cuyo dni se proporciona como parámetro
 
   async findByDni(dni:number):Promise<Cuenta[]>{
-    const cliente:Cliente=await this.clientesRepository.findOne({
-      where:{
-        dni:dni
-      },
-      relations:["cuentas"]
-    });
-
-    if(cliente){
-      return cliente.cuentas;
-    }else{
-      return [];
-    }
+    return this.cuentasRepository.createQueryBuilder("cuenta")
+    .innerJoin("cuenta.clientes","c")
+    .where("c.dni=:dni",{dni:dni})
+    .getMany();
     
   }
 
@@ -60,5 +48,15 @@ export class CuentasService {
     const clientes:Cliente[]=await this.clientesRepository.findBy({dni:In(titulares)});
     cuenta.clientes=clientes;
     return this.cuentasRepository.save(cuenta);
+  }
+
+
+  //saldo medio cuentas
+  saldoMedio():Promise<any>{
+    return this.dataSource.query("select avg(saldo) as saldo from cuentas");
+  }
+  //lo dejo, pero no se debe hacer así!!!
+  altaNuevaCuenta(cuenta:Cuenta):void{
+    this.dataSource.query("insert into cuentas values(?,?,?)",[cuenta.numeroCuenta,cuenta.saldo,cuenta.tipoCuenta]);
   }
 }

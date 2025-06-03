@@ -15,7 +15,7 @@ export class AlumnosService {
       .map(a=>a.usuario);//string[]
     
       return this.alumnosRepository.createQueryBuilder("alumno")
-      .where("alumno.usuario not in :ids",{ids:usuariosEnCurso})
+      .where("alumno.usuario not in (:...ids)",{ids:usuariosEnCurso})
       .getMany();
   }
 } 

@@ -32,12 +32,13 @@ export class FormacionController {
   }
 
   @Post('matricular')
-  async matricular(idCurso:number, usuario:string,@Res() response:Response) {
-    const resultado:Boolean = await this.matriculaService.matricular(usuario,idCurso);
+   async matricular(@Body() datos:any,@Res() response:Response){
+    const resultado:boolean=await this.matriculaService.matricular(datos.usuario,datos.idCurso);
     if(resultado){
       response.status(200).send();
     }else{
       response.status(409).send();
+
     }
   }
 }

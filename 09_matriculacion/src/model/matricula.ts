@@ -6,7 +6,8 @@ import { Curso } from "./curso";
 export class Matricula{
     @PrimaryColumn()
     idCurso:number;
-
+    @PrimaryColumn()
+    usuario:string;
     @ManyToOne(()=>Alumno,a=>a.matriculas)
     @JoinColumn({name:"usuario",referencedColumnName:"usuario"})
     alumno:Alumno;
@@ -16,7 +17,6 @@ export class Matricula{
 
     @Column()
     nota:number;
-    usuario:string;
 
     constructor(usuario?:string,idCurso?:number,nota?:number){
         this.idCurso=idCurso;

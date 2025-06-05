@@ -17,4 +17,9 @@ export class MatriculacionController {
   findByCurso(@Param("idCurso")idCurso:number){
     return this.matriculacionService.getCurso(idCurso);
   }
+
+  @Get('cursos')
+  Cursos(){
+    return this.matriculacionService.findCursosAll();
+  }
 }

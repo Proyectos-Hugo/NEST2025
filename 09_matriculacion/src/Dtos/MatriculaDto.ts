@@ -1,11 +1,17 @@
-export class MatriculaDto {
-    usuario:string;
-    idCurso:number;
+export class MatriculasDto{
+    nombre:string;
+    email:string;
+    curso:string;
     nota:number;
-
-    constructor(usu?:string, idCur?:number, not?:number){
-        this.usuario=usu;
-        this.idCurso=idCur;
-        this.nota=not;
+   constructor(
+        nombre?:string,
+        email?:string,
+        curso?:string,
+        nota?:number
+    ) {
+        this.nombre = nombre;
+        this.email = email;
+        this.curso = curso;
+        this.nota = nota;
     }
 }

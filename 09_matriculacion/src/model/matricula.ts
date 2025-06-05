@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { Alumno } from "./alumno";
 import { Curso } from "./curso";
 
+
 @Entity("matriculas")
 export class Matricula{
     @PrimaryColumn()
@@ -18,9 +19,15 @@ export class Matricula{
     @Column()
     nota:number;
 
-    constructor(usuario?:string,idCurso?:number,nota?:number){
-        this.idCurso=idCurso;
+    constructor(alumno?:Alumno,curso?:Curso,nota?:number){
+        this.curso=curso;
         this.nota=nota;
-        this.usuario=usuario;
+        this.alumno=alumno;
+        if(curso){
+            this.idCurso=curso.idCurso;
+        }
+        if(alumno){
+            this.usuario=alumno.usuario;
+        }
     }
 }

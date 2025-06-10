@@ -10,7 +10,6 @@ import { ProductosDtos } from 'src/Dtos/productosDtos';
 export class ProductosService {
   constructor(
     @InjectRepository(Producto) private repositoryProductos: Repository<Producto>,
-    @InjectRepository(Pedido) private repositoryPedidos: Repository<Pedido>
   ){}
 
   async save(pro:ProductoAltaDtos):Promise<boolean>{

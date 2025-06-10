@@ -25,6 +25,8 @@ export class PedidosService {
   async highPedido(pedido:PedidosAltaDtos):Promise<Boolean>{
     const prod:Producto = await this.repositoryProductos.findOneBy({producto:pedido.producto});
 
+    console.log(prod);
+    
     if(!prod || prod.stock<pedido.unidades){
       return false;
     }
@@ -35,5 +37,6 @@ export class PedidosService {
       this.repositoryPedidos.save(pedidoNuevo);
       return true;
     }
+
   }
 }

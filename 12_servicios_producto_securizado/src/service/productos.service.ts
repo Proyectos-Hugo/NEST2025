@@ -1,34 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Producto } from 'src/model/producto';
-import { Pedido } from 'src/model/pedido';
-import { ProductoAltaDtos } from 'src/Dtos/productoAltaDtos';
-import { ProductosDtos } from 'src/Dtos/productosDtos';
+import { ProductoAltaDtos } from '../Dtos/productoAltaDtos'; // Adjust the path as needed
+
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProductosService {
-  constructor(
-    @InjectRepository(Producto) private repositoryProductos: Repository<Producto>,
-  ){}
-
-  async save(pro:ProductoAltaDtos):Promise<boolean>{
-    const producto = await this.repositoryProductos.createQueryBuilder("productos")
-    .where("codigoProducto=:cod",{cod:pro.codigoProducto})
-    .getOne();
-
-    if(!producto){
-      await this.repositoryProductos.save(pro);
-      return true;
-    }else{
-      return false;
-    }
-  }
-
-  async catalogo(): Promise<ProductosDtos[]> {
-    return await this.repositoryProductos.find();
+  constructor(@InjectRepository(Producto) private productosRepository:Repository<Producto>){
     
   }
+
+  async alta(producto:ProductoAltaDtos):Promise<boolean>{
+    //buscamos un producto con ese código
+    const prod:Producto=await this.productosRepository.createQueryBuilder("producto")
+    .where("codigoProducto=:cod",{cod:producto.codigoProducto})
+    .getOne();
+    //si existe, no se puede dar de alta y devolvemos false
+    //si no existe, se da de alta y devolvemos true
+    if(prod){
+      return false;
+    }else{
+      this.productosRepository.save(producto);
+      return true;
+    }
+  }
+  async catalogo():Promise<ProductoAltaDtos[]>{
+    const resultado:Producto[]=await this.productosRepository.find();
+    return resultado.map(p=>new ProductoAltaDtos(p.codigoProducto,p.producto,p.precioUnitario,p.stock));  
+  }
 }
-
-

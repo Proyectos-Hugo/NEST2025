@@ -1,28 +1,22 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
 import { Pedido } from "./pedido";
-
-@Entity('productos')
+@Entity("productos")
 export class Producto{
-
     @PrimaryColumn()
     codigoProducto:number;
-
     @Column()
     producto:string;
-
     @Column()
     precioUnitario:number;
-
     @Column()
     stock:number;
-
-    @OneToMany(()=>Pedido, pe =>pe.codigoProducto)
-    pedido:Pedido[];
-
-    constructor(codPro?:number, prod?:string, preUni?:number, stock?:number){
-        this.codigoProducto=codPro;
-        this.producto=prod;
-        this.precioUnitario=preUni;
-        this.stock=stock;
-    } 
+    @OneToMany(()=>Pedido,pedido=>pedido.producto)
+    pedidos:Pedido[];
+    //un constructor con todos los paramétros menos pedidos. Y que sean opcionales
+    constructor(codigoProducto?:number, producto?:string, precioUnitario?:number, stock?:number){
+        this.codigoProducto=codigoProducto;
+        this.producto=producto;
+        this.precioUnitario=precioUnitario;
+        this.stock=stock;  
+    }
 }

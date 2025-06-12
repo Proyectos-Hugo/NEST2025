@@ -14,9 +14,9 @@ import { PedidosService } from 'src/service/pedidos.service';
 import { ProductosService } from 'src/service/productos.service';
 import {Response} from 'express';
 import { PedidosAltaDtos } from 'src/Dtos/pedidosAltaDtos';
-import { Roles } from 'src/security/roles.decorator';
-import { JwtAuthGuard } from 'src/security/jwt-auth.guard';
-import { RolesGuard } from 'src/security/roles.guard';
+import { Roles } from 'src/Security/roles.decorator';
+import { JwtAuthGuard } from 'src/Security/jwt-auth.guard';
+import { RolesGuard } from 'src/Security/roles.guard';
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Controller('tienda')
 export class PedidosProductosController {

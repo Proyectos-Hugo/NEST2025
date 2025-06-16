@@ -1,16 +1,30 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import axios from 'axios';
 import { PedidoDto } from 'src/model/PedidoDto';
 import { ProductoDto } from 'src/model/ProductoDto';
 
-
-
 @Injectable()
-export class ComprasService {
-  urlBase="http://localhost:3000/tienda";
+export class ProductosService implements OnModuleInit {
+  urlBase="http://localhost:4000";
+  token:string;
 
+  async onModuleInit(){
+    const preToken = await axios.post(`${this.urlBase}/auth/login`, {
+      username: 'admin',
+      password: 'admin'
+    });
+
+    this.token=preToken.data.valorToken;
+  }
+
+ 
   async buscarProductos(min:number,max:number):Promise<ProductoDto[]>{
-    const response:any=await axios.get(`${this.urlBase}/productos`);
+    const response = await axios.get(`${this.urlBase}/tienda/pedidos`, {
+    headers: {
+      Authorization: `Bearer ${this.token}`
+    }
+  });
+
     const jsonFiltrado:any=response.data.filter(p=>p.precioUnitario>=min&&p.precioUnitario<=max);
     const productos:ProductoDto[]=jsonFiltrado.map(
       p=>{
@@ -28,12 +42,16 @@ export class ComprasService {
       }
     );
     return productos;
-
+    
   }
 
   async altaPedido(pedido:PedidoDto):Promise<boolean>{
     try{
-      await axios.post(`${this.urlBase}/altaPedido`,pedido);
+      await axios.post(`${this.urlBase}/tienda/altaPedido{
+      headers:{
+        Authorization: ${this.token}
+      }
+    `,pedido);
       return true;
     }catch(err){
       return false;

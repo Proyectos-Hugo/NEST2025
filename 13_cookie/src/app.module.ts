@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LibreriaController } from './controller/libreria.controller';
-import { Cliente } from './model/Cliente';
-import { Libro } from './model/Libro';
+import { Cliente } from 'src/Model/Cliente';
+import { Libro } from 'src/Model/Libro';
 import { Venta } from './Model/Venta';
-import { ClientesService } from './service/clientes.service';
-import { ComprasService } from './service/compras.service';
-import { LibrosService } from './service/libros.service';
+import { ClientesService } from 'src/Service/clientes.service';
+import { ComprasService } from 'src/Service/compras.service';
+import { LibrosService } from 'src/Service/libros.service';
 
 
 @Module({
@@ -14,8 +14,8 @@ import { LibrosService } from './service/libros.service';
     type: 'mysql',
     host: 'localhost',
     port: 3306,
-    username: 'nestuser',
-    password: 'nestpass',
+    username: 'root',
+    password: 'root',
     database:'libros',
     entities: [Cliente, Libro, Venta], // Tablas de la base de datos 
     synchronize: false,

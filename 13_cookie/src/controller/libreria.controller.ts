@@ -15,7 +15,7 @@ import { LibrosService } from '../Service/libros.service';
 import {Response} from 'express';
 import { ClienteDatosDto } from '../Dtos/ClienteDatosDtos';
 import { ClientesService } from '../Service/clientes.service';
-import { LibroDatosDto } from 'src/dtos/LibroDatosDto';
+import { LibroDatosDto } from '../Dtos/LibroDatosDto';
 import {Request} from "express"
 
 

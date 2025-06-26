@@ -1,14 +1,15 @@
-import { CuentaController } from './controller/cuenta.controller';
 import { Cliente } from './model/Cliente';
+import { Movimientos } from './model/Moviminetos';
 import { Module } from '@nestjs/common';
 import { MovimientosController } from './controller/movimientos.controller';
+import { CuentaController } from './controller/cuenta.controller';
 import { MovimientosService } from './service/movimientos.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Movimientos } from './model/Moviminetos';
-import { Cuenta } from './model/Cuenta';
-import { ClienteController } from './controller/clientes.controller';
 import { CuentaService } from './service/cuenta.service';
-import { ClienteService } from './service/clientes.service';
+import { ClientesService } from './service/clientes.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Cuenta } from './model/Cuenta';
+
+
 @Module({
   imports: [TypeOrmModule.forRoot({
   type: 'mysql',
@@ -20,7 +21,7 @@ import { ClienteService } from './service/clientes.service';
   entities: [Movimientos,Cuenta,Cliente],
   synchronize: false,
   }),TypeOrmModule.forFeature([Movimientos,Cuenta,Cliente])],
-  controllers: [MovimientosController,CuentaController,ClienteController],
-  providers: [MovimientosService,CuentaService,ClienteService],
+  controllers: [MovimientosController,CuentaController],
+  providers: [MovimientosService,CuentaService,ClientesService],
 })
 export class AppModule {}

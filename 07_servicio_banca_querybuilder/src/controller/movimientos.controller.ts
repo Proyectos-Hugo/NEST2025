@@ -8,7 +8,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { Movimiento } from 'src/model/Moviminetos';
+import { Movimientos } from 'src/model/Moviminetos';
 import { MovimientosService } from 'src/service/movimientos.service';
 
 @Controller('movimientos')
@@ -25,7 +25,7 @@ export class MovimientosController {
     return this.movimientosService.findByIdCuenta(idCuenta);
   }
   @Post('alta')
-  alta(@Body() movimiento:Movimiento){
+  alta(@Body() movimiento:Movimientos){
     this.movimientosService.save(movimiento);
   }
   @Get("porSaldoMin/:saldoMin")

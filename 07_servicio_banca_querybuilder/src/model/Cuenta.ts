@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryColumn } from "typeorm";
 import { Cliente } from "./Cliente";
-import { Movimiento } from "./Moviminetos";
+import { Movimientos } from "./Moviminetos";
 
 @Entity("cuentas")
 export class Cuenta{
@@ -10,8 +10,8 @@ export class Cuenta{
     saldo:number;
     @Column()
     tipoCuenta:string;
-    @OneToMany(()=>Movimiento,movimiento=>movimiento.cuenta)
-    movimientos:Movimiento[];
+    @OneToMany(()=>Movimientos,movimiento=>movimiento.cuenta)
+    movimientos:Movimientos[];
     @ManyToMany(()=>Cliente,cliente=>cliente.cuentas,{cascade:["insert","remove"]})
     @JoinTable({
         name: 'titulares',

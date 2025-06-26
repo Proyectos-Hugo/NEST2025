@@ -10,11 +10,11 @@ import {
 } from '@nestjs/common';
 import {Response} from 'express';
 import { Cuenta } from 'src/model/Cuenta';
-import { CuentasService } from 'src/service/cuenta.service';
+import { CuentaService } from 'src/service/cuenta.service';
 
 @Controller('cuentas')
-export class CuentasController {
-  constructor(private readonly cuentasService: CuentasService) {}
+export class CuentaController {
+  constructor(private readonly cuentasService: CuentaService) {}
   @Get("buscarPorFecha/:fecha")
   buscarPorFecha(@Param("fecha") fecha:Date){
     return this.cuentasService.findByMovimientosFecha(fecha);

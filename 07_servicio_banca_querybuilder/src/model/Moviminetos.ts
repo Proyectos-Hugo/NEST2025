@@ -2,7 +2,7 @@ import { Column, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Entity } from 'typeorm';
 import { Cuenta } from './Cuenta';
 @Entity("movimientos")
-export class Movimiento{
+export class Movimientos{
     @PrimaryGeneratedColumn()
     idMovimiento:number;
     @Column({type:"datetime"})

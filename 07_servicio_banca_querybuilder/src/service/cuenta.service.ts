@@ -6,7 +6,7 @@ import { DataSource, In, MoreThan, Repository } from 'typeorm';
 
 
 @Injectable()
-export class CuentasService {
+export class CuentaService {
   constructor( @InjectRepository(Cuenta) private cuentasRepository:Repository<Cuenta>,
    @InjectRepository(Cliente) private clientesRepository:Repository<Cliente>,
    private dataSource:DataSource
